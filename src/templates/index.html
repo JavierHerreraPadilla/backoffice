@@ -1,0 +1,34 @@
+
+{% extends 'base.html' %}
+{% block title %}Backoffice{% endblock %}
+
+{% block body %}
+<h1>BACKOFFICE AUTOSERVICE</h1>
+
+<div class="container row center">
+    <div class="col-4">
+<div id="list-example" class="list-group overflow-auto">
+    {% for ind, (doc, script) in scripts %}
+    <a class="list-group-item list-group-item-action" href="#list-item-{{ ind }}">Item {{ script.name }}</a>
+    {% endfor %}
+
+  </div>
+</div>
+<div class="col-8">
+  <div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-offset="0" class="scrollspy-example overflow-auto" tabindex="0" style="max-width: 95%; max-height: 300px;">
+    {% for ind, (doc, script) in scripts %}
+    <h4 id="list-item-{{ ind }}">
+        <a href="{{ url_for('read_item', item_id=ind) }}?script_name={{ script.name }}" target="_blank">
+        {{ script.name }}</h4>
+        </a>
+    <p> 
+        {{ doc }}
+    </p>
+    {% endfor %}
+
+</div>
+</div>
+</div>
+
+{% endblock %}
+
