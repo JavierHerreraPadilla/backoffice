@@ -31,6 +31,35 @@
 </div>
 
 
+<div class="container row center mt-4 border">
+  <div class="col-4">
+<div id="list-example" class="list-group overflow-auto">
+  {% for func in func_info %}
+  <a class="list-group-item list-group-item-action" href="#list-item-{{ func.script_id }}">function: {{ func.script_id }} {{ func.name }}</a>
+  {% endfor %}
+
+</div>
+</div>
+<div class="col-8">
+<div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-offset="0" class="scrollspy-example overflow-auto" tabindex="0" style="max-width: 95%; max-height: 300px;">
+  
+  {% for func in func_info %}
+  <h4 id="list-item-{{ func.script_id }}">
+      <a href="{{ url_for('render_function', function_id=func.script_id) }}" target="_blank">
+      {{ func.name }}
+  </h4>
+      </a>
+  <p> 
+      {{ func.doc }}
+  </p>
+  {% endfor %}
+
+</div>
+</div>
+</div>
+
+<br><br>
+
 <div class="container border">
   {% for func in func_info %}
   {{ func }} <br><br>

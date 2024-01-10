@@ -23,6 +23,10 @@ def obtener_edad(nombre: str) -> str:
             return f"Error al realizar la solicitud: {response.status_code}"
     except requests.RequestException as e:
         return f"Error de conexión: {e}"
+    
+def list_function(lst: list, letter: str) -> str:
+    """test function to see if type list works"""
+    return "Something"
 
 if __name__ == "__main__":
     genders = {}

@@ -2,16 +2,18 @@ import asyncio
 import json
 from datetime import datetime
 from .. import oauth2
-from fastapi import HTTPException, status, Request, Depends, Form, APIRouter
+from fastapi import HTTPException, status, Request, Depends, Form, APIRouter, Body
 from fastapi.background import BackgroundTasks
 from .user import User
 from random import randint
 from fastapi.responses import RedirectResponse
 from ..utils import TASKS
+from typing import Dict
 
 router = APIRouter(
     tags=["post-routes"]
     )
+
 
 async def bash_script_asincrono(command: list, job_id: int):
     """asynconously runs the bash script"""
@@ -29,6 +31,7 @@ async def bash_script_asincrono(command: list, job_id: int):
     TASKS[job_id]["stderr"] = stderr
     TASKS[job_id]["took"] = datetime.utcnow() - TASKS[job_id]["started"] 
 
+
 def process_script_input(script_data: str) -> list:
     """process de incoming data entered by the client to run the script"""
     data_list = script_data.replace("\r\n", ",").split(",")
@@ -37,6 +40,13 @@ def process_script_input(script_data: str) -> list:
     data_list = [data_point.strip() for data_point in data_list if data_point not in ["", " ", "\n"]]
     return data_list
 
+
+@router.post("/run-function", response_model=Dict)
+async def run_function(request: Request):
+    form_data = await request.form()
+    form_data = dict(form_data)
+    form_data.pop("submit")
+    return form_data
 
 @router.post("/")
 async def post_root(request: Request, background_task: BackgroundTasks, data: str = Form(...), 
