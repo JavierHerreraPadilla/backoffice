@@ -8,6 +8,7 @@ __doc__ = "Returns the gender of a name TEST"
 names = sys.argv[1:]
 
 def obtener_genero(nombre: str) -> tuple:
+    """Returns the gender of a name TEST"""
     url = f"https://api.genderize.io?name={nombre}"
     
     try:

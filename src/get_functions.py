@@ -34,12 +34,6 @@ def main():
         sig = inspect.signature(func[1])
         func.append(sig.parameters)
         func.append(sig.return_annotation)
-        # for para_name, param_obj in sig.parameters.items():
-        #     print(para_name, param_obj.annotation)
-            
-    # funcs es una lista de listas. Cada lista interna -> ind 0: nombre del modulo o escript. ind 1: objeto funcion, 
-        #ind 2: parametros y sus tipos de datos,
-        # ind 3: tipo de dato del retorno 
-    print(funcs)
+
     return funcs
 

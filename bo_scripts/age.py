@@ -8,6 +8,7 @@ __doc__ = """Returns the age of a name"""
 names = sys.argv[1:]
 
 def obtener_edad(nombre: str) -> str:
+    """Returns the age of a name"""
     url = f"https://api.agify.io?name={nombre}"
     
     try:

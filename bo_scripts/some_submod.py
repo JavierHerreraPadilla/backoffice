@@ -1,4 +1,4 @@
-from typing import List, Literal
+from typing import List, Literal, Optional
 
 
 """A TESTING MODULE"""
@@ -6,3 +6,6 @@ from typing import List, Literal
 def test_func(a: str, b: Literal["prd", "stg"]) -> int:
     """func that retuns a set list"""
     return 35
+
+def output_literal() -> Literal[0, 1]:
+    ...

@@ -1,15 +1,12 @@
 from fastapi import APIRouter, HTTPException, Request, status
 from fastapi.responses import HTMLResponse
-from typing import Dict, List
-from pathlib import Path, PosixPath
+from typing import Dict
 from fastapi.templating import Jinja2Templates
-import importlib
-from ..utils import USERS
-from ..utils import TASKS
+from ..utils import TASKS, USERS, get_funtion_info, get_python_scripts, is_type_literal
 from . import user
-from ..get_functions import main
+import pathlib
 
-FUNCS = main()
+FUNCS = get_funtion_info()
 
 router = APIRouter(
     tags=["get-routes"]
@@ -17,27 +14,22 @@ router = APIRouter(
 
 templates = Jinja2Templates(directory="./src/templates")
 
-script_directory = Path("../bo_scripts")
-
-def get_python_scripts():
-    script_directory = Path("./bo_scripts")
-
-    python_scripts: List[PosixPath] = [scpt for scpt in script_directory.glob("*.py") if not scpt.name.startswith("__")]
-    docs = []
-    for script in python_scripts:
-        module_absolute_path = script.absolute().__str__()
-        specification = importlib.util.spec_from_file_location(script.name, module_absolute_path)
-        imported_module = importlib.util.module_from_spec(specification)
-        specification.loader.exec_module(imported_module)
-        docs.append(imported_module.__doc__)  # module doc string
-    script_info = enumerate(zip(docs, python_scripts))
-    return script_info
+script_directory = pathlib.Path("./bo_scripts")
 
 @router.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
     scripts = get_python_scripts()
-    print("####", FUNCS[2][1]("3", "prd"))
-    return templates.TemplateResponse("index.html", {"request": request, "scripts": list(scripts)})
+    function_info = [{"name": func[1].__name__, 
+                      "doc": func[1].__doc__,
+                       "params": {param_name:param_type.annotation.__name__ if not is_type_literal(param_type) else [param_type.annotation.__name__] + list(param_type.annotation.__args__ )
+                                  for param_name, param_type in func[2].items()},
+                        "output": func[3].__name__ if not is_type_literal(func[3]) else [func[3].__name__] + list(func[3].__args__)
+                        } 
+                        for func in FUNCS]
+    
+    return templates.TemplateResponse("index.html", {"request": request, 
+                                                     "scripts": list(scripts), 
+                                                     "func_info": function_info})
 
 
 @router.get("/users", response_model=Dict)
