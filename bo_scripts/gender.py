@@ -2,12 +2,12 @@ import requests
 import sys
 import json
 
-__doc__ = "Returns the gender of a name"
+__doc__ = "Returns the gender of a name TEST"
 
 
 names = sys.argv[1:]
 
-def obtener_genero(nombre: str):
+def obtener_genero(nombre: str) -> tuple:
     url = f"https://api.genderize.io?name={nombre}"
     
     try:

@@ -7,6 +7,9 @@ import importlib
 from ..utils import USERS
 from ..utils import TASKS
 from . import user
+from ..get_functions import main
+
+FUNCS = main()
 
 router = APIRouter(
     tags=["get-routes"]
@@ -18,7 +21,8 @@ script_directory = Path("../bo_scripts")
 
 def get_python_scripts():
     script_directory = Path("./bo_scripts")
-    python_scripts: List[PosixPath] = list(script_directory.glob("*.py"))
+
+    python_scripts: List[PosixPath] = [scpt for scpt in script_directory.glob("*.py") if not scpt.name.startswith("__")]
     docs = []
     for script in python_scripts:
         module_absolute_path = script.absolute().__str__()
@@ -32,6 +36,7 @@ def get_python_scripts():
 @router.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
     scripts = get_python_scripts()
+    print("####", FUNCS[2][1]("3", "prd"))
     return templates.TemplateResponse("index.html", {"request": request, "scripts": list(scripts)})
 
 

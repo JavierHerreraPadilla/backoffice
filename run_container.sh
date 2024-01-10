@@ -17,4 +17,4 @@ docker build -t "$IMAGE_NAME" .
 
 docker run -d -p 8000:8000 --name "$CONTAINER_NAME" "$IMAGE_NAME"
 
-watch docker ps -a
+watch docker logs $(docker ps -aq)
