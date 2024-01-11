@@ -10,18 +10,17 @@
             {% for param, param_type in function.params.items() %}
                {% if param_type == "str" %}
                 <input type="text" name="{{ param }}" placeholder="{{ param }}"><br>
-               {% elif param_type == "list" %}
-                <textarea name="{{ param }}" rows="4" cols="50">
-                    {{ param }}
-                </textarea><br>
+               {% elif param_type | lower == "list" %}
+                <textarea name="{{ param }}" rows="4" cols="50"></textarea><br>
                 {% elif "Literal" in param_type %}
                     <label for="{{ param }}">Select an {{ param }}:</label><br>
                     <select id="{{ param }}" name="{{ param }}">
                         {% for literal in param_type[1:] %}
                             <option value="{{ literal }}">{{ literal }}</option>
                         {% endfor %}
-                        
                     </select><br>
+                {% elif param_type in ["int", "float"] %}
+                <input type="number" name="{{ param }}" placeholder="{{ param }}"><br>
                {% endif %}
             {% endfor %}
         {% endif %}
